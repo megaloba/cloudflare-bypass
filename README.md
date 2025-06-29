@@ -1,166 +1,194 @@
-![Python](https://img.shields.io/badge/python-3.10+-blue)
-![Node.js](https://img.shields.io/badge/node.js-18+-green)
+# Cloudflare Bypass: Simple Playwright Examples in Python & Node.js
 
-
-# Cloudflare 1020 Bypass Examples (Python & Node.js)
-[![HasData_bannner](banner.png)](https://hasdata.com/)
-
-This repo contains working examples of bypassing **Cloudflare 1020** errors using **Playwright + Stealth** with **residential proxies**, **rotating headers**, and **basic anti-bot evasion tricks**. Works in **Node.js** and **Python**.
+![Cloudflare Bypass](https://img.shields.io/badge/Cloudflare%20Bypass-Playwright-blue)
 
 ## Table of Contents
 
-1. [Requirements](#requirements)
-2. [Project Structure](#project-structure)
-3. [Bypass Examples](#bypass-examples)
-   * [Playwright Basic](#playwright-basic)
-   * [Playwright + Stealth](#playwright--stealth)
-   * [Residential Proxy Rotation](#residential-proxy-rotation)
-   * [User-Agent + Header Spoofing](#user-agent--header-spoofing)
-   * [Human-like Behavior](#human-like-behavior)
-   * [Full Flow Example](#full-flow-example)
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Examples](#examples)
+- [Improvements](#improvements)
+- [Contributing](#contributing)
+- [License](#license)
+- [Releases](#releases)
 
-## Requirements
+## Overview
 
-**Python 3.10+** or **Node.js 18+**
+This repository provides minimal working examples for bypassing Cloudflare 1020 errors using Playwright in both Python and Node.js. The focus is on showing basic setups to load pages that are often protected by anti-bot measures. You can find working scripts that help you navigate through these restrictions smoothly.
 
-### Python Setup
+## Features
 
-Required packages:
+- **Cross-Platform**: Works on both Python and Node.js.
+- **Minimal Setup**: Easy to understand and modify examples.
+- **Stealth Plugins**: Use of stealth plugins to mimic human behavior.
+- **Proxy Rotation**: Implementation of proxy rotation to avoid detection.
+- **Human-like Behaviors**: Techniques to make requests appear more human-like.
 
-- `requests`
-- `playwright`
-- `playwright-stealth`
+## Installation
 
-Install:
+To get started, you need to install Playwright. Follow the steps below for both Python and Node.js.
+
+### Python Installation
+
+1. Ensure you have Python 3.7 or higher installed.
+2. Create a virtual environment (optional but recommended):
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
+
+3. Install Playwright:
+
+   ```bash
+   pip install playwright
+   playwright install
+   ```
+
+### Node.js Installation
+
+1. Ensure you have Node.js installed (version 12 or higher).
+2. Create a new directory for your project and navigate into it:
+
+   ```bash
+   mkdir my-project
+   cd my-project
+   ```
+
+3. Initialize a new Node.js project:
+
+   ```bash
+   npm init -y
+   ```
+
+4. Install Playwright:
+
+   ```bash
+   npm install playwright
+   ```
+
+## Usage
+
+To use the examples provided in this repository, navigate to the appropriate folder for either Python or Node.js and run the script.
+
+### Python Example
+
+Navigate to the `python` folder and run:
 
 ```bash
-pip install playwright
-playwright install
-pip install playwright-stealth
+python example.py
 ```
 
-### Node.js Setup
+### Node.js Example
 
-Required packages:
-
-- `playwright`
-- `playwright-extra`
-- `playwright-extra-plugin-stealth`
-
-Install:
+Navigate to the `node` folder and run:
 
 ```bash
-npm install playwright playwright-extra playwright-extra-plugin-stealth
+node example.js
 ```
 
-## Project Structure
+## Examples
 
-```
-cf1020-bypass-examples/
-│
-├── python/
-│   ├── basic_playwright.py
-│   ├── stealth_playwright.py
-│   ├── proxy_rotation.py
-│   ├── header_rotation.py
-│   ├── human_behavior.py
-│   ├── full_flow_example.py
-│
-├── nodejs/
-│   ├── basic_playwright.js
-│   ├── stealth_playwright.js
-│   ├── proxy_rotation.js
-│   ├── header_rotation.js
-│   ├── human_behavior.js
-│   ├── full_flow_example.js
-│
-└── README.md
+### Python Example Code
+
+Here is a basic example in Python to bypass Cloudflare 1020 errors:
+
+```python
+from playwright.sync_api import sync_playwright
+
+def run(playwright):
+    browser = playwright.chromium.launch()
+    page = browser.new_page()
+    page.goto("https://example.com")  # Replace with your target URL
+    print(page.title())
+    browser.close()
+
+with sync_playwright() as playwright:
+    run(playwright)
 ```
 
-Each script shows a different tactic for avoiding Cloudflare 1020. No frameworks, no noise — just straight working examples.
+### Node.js Example Code
 
-## Bypass Examples
+Here is a basic example in Node.js to bypass Cloudflare 1020 errors:
 
+```javascript
+const { chromium } = require('playwright');
 
-### Playwright Basic
+(async () => {
+    const browser = await chromium.launch();
+    const page = await browser.newPage();
+    await page.goto('https://example.com'); // Replace with your target URL
+    console.log(await page.title());
+    await browser.close();
+})();
+```
 
-Basic page load using vanilla Playwright (likely to trigger CAPTCHA or 1020).
-| Parameter     | Description            | Example                 |
-| ------------- | ---------------------- | ----------------------- |
-| `url`         | Target URL to load     | `'https://example.com'` |
-| `timeout`     | Maximum wait time (ms) | `60000`                 |
-| `output_file` | File to save page HTML | `'page.html'`           |
+## Improvements
 
+You can enhance your scripts by implementing the following features:
 
-### Playwright + Stealth
+- **Stealth Plugins**: Use Playwright's stealth plugins to avoid detection.
+- **Proxy Rotation**: Implement a proxy rotation system to prevent IP bans.
+- **Human-like Interactions**: Add random delays and mouse movements to mimic human behavior.
 
-Hide `webdriver` flag, spoof plugins, patch headless indicators.
+### Stealth Plugin Example
 
-| Parameter    | Description                  | Example                 |
-| ------------ | ---------------------------- | ----------------------- |
-| `target_url` | URL to visit and scrape      | `'https://example.com'` |
-| `headless`   | Run browser in headless mode | `True`                  |
-| `timeout`    | Maximum wait time (ms)       | `60000`                 |
+For Python:
 
+```python
+from playwright.sync_api import sync_playwright
+from playwright_stealth import stealth_sync
 
-### Residential Proxy Rotation
+def run(playwright):
+    browser = playwright.chromium.launch()
+    page = browser.new_page()
+    stealth_sync(page)  # Use stealth plugin
+    page.goto("https://example.com")
+    print(page.title())
+    browser.close()
 
-Add a pool of rotating residential proxies for better IP reputation.
+with sync_playwright() as playwright:
+    run(playwright)
+```
 
-| Parameter       | Description                                   | Example                                 |
-| --------------- | --------------------------------------------- | --------------------------------------- |
-| `target_url`    | URL to visit with rotating headers            | `'https://example.com'`                 |
-| `user_agents`   | List of User-Agent strings to rotate          | `['Mozilla/5.0...', 'Chrome/91.0...']`  |
-| `extra_headers` | Additional HTTP headers to include (optional) | `{'Accept-Language': 'en-US,en;q=0.9'}` |
-| `rotate_every`  | Number of requests before changing header     | `1` (rotate every request)              |
+For Node.js:
 
+```javascript
+const { chromium } = require('playwright');
+const { addStealthPlugin } = require('playwright-stealth');
 
-### User-Agent + Header Spoofing
+(async () => {
+    const browser = await chromium.launch();
+    const page = await browser.newPage();
+    addStealthPlugin(page);  // Use stealth plugin
+    await page.goto('https://example.com');
+    console.log(await page.title());
+    await browser.close();
+})();
+```
 
-Randomized headers and modern user agents for each session.
-| Parameter     | Description                              | Example                                 |
-| ------------- | ---------------------------------------- | --------------------------------------- |
-| `target_url`  | URL to visit with rotated headers        | `'https://example.com'`                 |
-| `user_agents` | List of User-Agent strings to rotate     | `["Mozilla/5.0...", "Safari/537.36"]`   |
-| `headers`     | Additional HTTP headers to include       | `{"Accept-Language": "en-US,en;q=0.9"}` |
-| `proxy`       | Proxy server address (optional)          | `'http://user:pass@proxy.com:8080'`     |
-| `timeout`     | Max time to wait for page load (seconds) | `30`                                    |
+## Contributing
 
+Contributions are welcome! If you want to improve this repository, please follow these steps:
 
-### Human-like Behavior
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/YourFeature`).
+3. Make your changes and commit them (`git commit -m 'Add some feature'`).
+4. Push to the branch (`git push origin feature/YourFeature`).
+5. Open a pull request.
 
-Add mouse movement, scrolling, and timed delays.
-| Parameter                     | Description                 | Example                                      |
-| ----------------------------- | --------------------------- | -------------------------------------------- |
-| `page`                        | Playwright page object      | `page.goto('https://example.com')`           |
-| `sleep`                       | Pause execution for realism | `time.sleep(1.5)` / `await sleep(1500)` (ms) |
-| `mouse.move(x, y)`            | Move mouse cursor to (x, y) | `page.mouse.move(100, 100)`                  |
-| `mouse.click(x, y)`           | Click at coordinates (x, y) | `page.mouse.click(200, 300)`                 |
-| `keyboard.press(key)`         | Simulate keyboard key press | `page.keyboard.press('PageDown')`            |
-| `mouse.wheel(deltaX, deltaY)` | Scroll page by delta        | `page.mouse.wheel(0, 400)`                   |
+## License
 
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-### Full Flow Example
+## Releases
 
-All combined: stealth, headers, proxies, behavior — in one script.
+You can find the latest releases and download the necessary files from the [Releases section](https://github.com/megaloba/cloudflare-bypass/releases). 
 
-| Parameter     | Description                                       | Example                                          |
-| ------------- | ------------------------------------------------- | ------------------------------------------------ |
-| `proxy`       | Proxy server URL with auth                        | `'http://user:pass@proxy.example:8000'`          |
-| `user_agent`  | Browser user agent string                         | `'Mozilla/5.0 (Windows NT 10.0; Win64; x64)...'` |
-| `target_url`  | URL to navigate and scrape                        | `'https://example.com'`                          |
-| `headless`    | Whether to run browser in headless mode           | `True` (Python) / `true` (Node.js)               |
-| `delay_range` | Range (seconds) for random delays between actions | `0.5 to 2 seconds`                               |
+For specific files, download and execute them as needed. Check back often for updates and new features.
 
+![Download Latest Release](https://img.shields.io/badge/Download%20Latest%20Release-Click%20Here-brightgreen)
 
-## Disclaimer
-
-These examples are for **educational purposes** only. Learn more about [the legality of web scraping](https://hasdata.com/blog/is-web-scraping-legal).
-
-
-
-## 📎 More Resources
-
-* [How to Bypass Cloudflare 1020](https://hasdata.com/blog/bypass-cloudflare-1020)
-* [Join the community on Discord](https://email.hasdata.com/e/c/eyJlbWFpbF9pZCI6ImRnU2RrUWdEQVBENUF1XzVBZ0dXcXhUNGdSTk12RXZEb0pPM3UxUT0iLCJocmVmIjoiaHR0cHM6Ly9oYXNkYXRhLmNvbS9qb2luLWRpc2NvcmQiLCJpbnRlcm5hbCI6IjlkOTEwODAxYmY4ZjAxZjBmOTAyIiwibGlua19pZCI6MjMzfQ/7b95f85846853ee473b2d955c1e158190975e23eb18b11156d6df08e1f544488)
-* [Star this repo if helpful ⭐](#)
+Explore the repository and enhance your web scraping skills while bypassing Cloudflare restrictions effectively.
